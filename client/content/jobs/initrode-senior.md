@@ -7,14 +7,14 @@ summary: Developed and architected real-time data visualization features for Ini
 description:
 tags:
   [
-    "React",
-    "TypeScript",
-    "WebSockets",
-    "Real-time Data",
-    "System Architecture",
-    "Performance Optimization",
-    "TanStack",
-    "Web Development",
+    'React',
+    'TypeScript',
+    'WebSockets',
+    'Real-time Data',
+    'System Architecture',
+    'Performance Optimization',
+    'TanStack',
+    'Web Development',
   ]
 ---
 

@@ -8,12 +8,12 @@ summary: Junior frontend developer working on React-based web applications using
 description:
 tags:
   [
-    "React",
-    "TypeScript",
-    "Frontend Development",
-    "JavaScript",
-    "TanStack",
-    "Web Development",
+    'React',
+    'TypeScript',
+    'Frontend Development',
+    'JavaScript',
+    'TanStack',
+    'Web Development',
   ]
 ---
 
