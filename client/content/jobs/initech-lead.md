@@ -8,14 +8,14 @@ summary: Led a cross-functional team of three engineers in developing and mainta
 description:
 tags:
   [
-    "React",
-    "TypeScript",
-    "Team Leadership",
-    "Frontend Architecture",
-    "Technical Leadership",
-    "Project Management",
-    "TanStack",
-    "Web Development",
+    'React',
+    'TypeScript',
+    'Team Leadership',
+    'Frontend Architecture',
+    'Technical Leadership',
+    'Project Management',
+    'TanStack',
+    'Web Development',
   ]
 ---
 
