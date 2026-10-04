@@ -81,9 +81,12 @@ export default function ResumeAssistant() {
 
   // Sync with store for header control
   useEffect(() => {
-    return showResumeAssistant.subscribe(() => {
+    const sub = showResumeAssistant.subscribe(() => {
       setIsOpen(showResumeAssistant.state)
     })
+    return () => {
+      sub.unsubscribe()
+    }
   }, [])
 
   const handleToggle = () => {
