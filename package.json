@@ -19,6 +19,15 @@
   "packageManager": "pnpm@12.9.0",
   "type": "module",
   "devDependencies": {
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.4",
     "prettier": "^3.9.9"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }
