@@ -1,0 +1,24 @@
+{
+  "name": "GitHorizon",
+  "version": "1.0.0",
+  "description": "Gives an open, forward-looking, and scalable feel.",
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "prettier "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.9.0",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.9.0",
+  "type": "module",
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}
