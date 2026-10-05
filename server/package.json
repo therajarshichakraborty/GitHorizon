@@ -1,0 +1,40 @@
+{
+  "name": "GitHorizon",
+  "version": "1.0.0",
+  "description": "Gives an open, forward-looking, and scalable feel.",
+  "type": "module",
+  "scripts": {
+    "init": "tsx lib/yargs.bash.ts init",
+    "add": "tsx lib/yargs.bash.ts add",
+    "commit": "tsx lib/yargs.bash.ts commit",
+    "push": "tsx lib/yargs.bash.ts push",
+    "pull": "tsx lib/yargs.bash.ts pull",
+    "revert":"tsx lib/yargs.bash.ts revert"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.9.0",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.9.0",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.4",
+    "prettier": "^3.9.9"
+  },
+  "dependencies": {
+    "@types/yargs": "^17.0.35",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "yargs": "^18.2.0",
+    "zod": "^4.6.5"
+  }
+}
