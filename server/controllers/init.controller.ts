@@ -1,3 +1,3 @@
 export function initRepository() {
-    console.log("Initializing a .horizon repository");
+  console.log('Initializing a .horizon repository');
 }

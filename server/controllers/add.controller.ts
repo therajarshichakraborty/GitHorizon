@@ -1,3 +1,3 @@
-export function addFiles(){
-    console.log("Adding files");
+export function addFiles() {
+  console.log('Adding files');
 }

@@ -4,12 +4,13 @@
   "description": "Gives an open, forward-looking, and scalable feel.",
   "type": "module",
   "scripts": {
+    "cli": "tsx lib/yargs.bash.ts",
     "init": "tsx lib/yargs.bash.ts init",
     "add": "tsx lib/yargs.bash.ts add",
     "commit": "tsx lib/yargs.bash.ts commit",
     "push": "tsx lib/yargs.bash.ts push",
     "pull": "tsx lib/yargs.bash.ts pull",
-    "revert":"tsx lib/yargs.bash.ts revert"
+    "revert": "tsx lib/yargs.bash.ts revert"
   },
   "keywords": [],
   "author": "",
