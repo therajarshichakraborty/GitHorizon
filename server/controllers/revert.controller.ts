@@ -1,3 +1,3 @@
 export function revertChanges() {
-  console.log('Reverting files');
+  console.log("Reverting files");
 }

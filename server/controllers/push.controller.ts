@@ -1,3 +1,3 @@
 export function pushToRemote() {
-  console.log('Pushing files');
+  console.log("Pushing files");
 }

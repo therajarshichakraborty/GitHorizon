@@ -1,3 +1,3 @@
 export function pullCommits() {
-  console.log('Pulling files');
+  console.log("Pulling files");
 }
