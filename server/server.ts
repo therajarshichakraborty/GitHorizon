@@ -1,40 +1,40 @@
-import http from 'node:http';
-import process from 'node:process';
-import { scaffoldApp } from './app.js';
-import { type Request, type Response } from 'express';
+import { createServer, type Server } from "node:http";
+import { type Request, type Response } from "express";
+import process from "node:process";
+import { scaffoldApp } from "./scaffolfApplication.js";
+import { env } from "./lib/env.js";
 
-const PORT = Number(process.env.PORT) || 5000;
-const HOST = process.env.HOST || '0.0.0.0';
+const PORT = Number(env.PORT) as number;
+const HOST = String(env.HOST) as string;
 const SHUTDOWN_TIMEOUT = 10_000;
 
-let server: http.Server | undefined;
+let server: Server;
 let isShuttingDown = false;
 
-const bootStrap = async (): Promise<void> => {
+export default async function bootStrap(): Promise<void> {
   try {
-    const app = scaffoldApp();
-    server = http.createServer(app);
+    const nodeServer = await scaffoldApp();
+    server = createServer(nodeServer);
 
-    app.get('/', (req: Request, res: Response) => {
-      res.json({ message: 'Server is running' });
+    nodeServer.get("/", (req: Request, res: Response) => {
+      res.json({ message: "Server is running" });
     });
 
-    server.on('error', (error: NodeJS.ErrnoException) => {
-      if (error.code === 'EADDRINUSE') {
+    server.on("error", (error: NodeJS.ErrnoException) => {
+      if (error.code === "EADDRINUSE") {
         console.error(`Port ${PORT} is already in use.`);
-      } else if (error.code === 'EACCES') {
+      } else if (error.code === "EACCES") {
         console.error(`Permission denied while attempting to bind to ${HOST}:${PORT}.`);
       } else {
-        console.error('HTTP server error:', error);
+        console.error("HTTP server error:", error);
       }
-
       process.exit(1);
     });
 
-    server.on('listening', () => {
+    server.on("listening", () => {
       const address = server?.address();
 
-      if (typeof address === 'object' && address !== null) {
+      if (typeof address === "object" && address !== null) {
         console.log(`HTTP server listening on ${address.address}:${address.port}`);
       } else {
         console.log(`HTTP server listening on ${HOST}:${PORT}`);
@@ -43,10 +43,10 @@ const bootStrap = async (): Promise<void> => {
 
     server.listen(PORT, HOST);
   } catch (error) {
-    console.error('Failed to bootstrap application:', error);
+    console.error("Failed to bootstrap application:", error);
     process.exit(1);
   }
-};
+}
 
 const shutdown = async (signal: string): Promise<void> => {
   if (isShuttingDown) {
@@ -77,7 +77,7 @@ const shutdown = async (signal: string): Promise<void> => {
         });
       });
 
-      console.log('HTTP server closed successfully.');
+      console.log("HTTP server closed successfully.");
     }
 
     clearTimeout(forceShutdownTimer);
@@ -86,27 +86,30 @@ const shutdown = async (signal: string): Promise<void> => {
   } catch (error) {
     clearTimeout(forceShutdownTimer);
 
-    console.error('Error during graceful shutdown:', error);
+    console.error("Error during graceful shutdown:", error);
     process.exit(1);
   }
 };
 
-process.on('SIGTERM', () => {
-  void shutdown('SIGTERM');
+process.on("SIGTERM", () => {
+  void shutdown("SIGTERM");
 });
 
-process.on('SIGINT', () => {
-  void shutdown('SIGINT');
+process.on("SIGINT", () => {
+  void shutdown("SIGINT");
 });
 
-process.on('uncaughtException', error => {
-  console.error('Uncaught exception:', error);
-  void shutdown('uncaughtException');
+process.on("uncaughtException", error => {
+  console.error("Uncaught exception:", error);
+  void shutdown("uncaughtException");
 });
 
-process.on('unhandledRejection', reason => {
-  console.error('Unhandled promise rejection:', reason);
-  void shutdown('unhandledRejection');
+process.on("unhandledRejection", reason => {
+  console.error("Unhandled promise rejection:", reason);
+  void shutdown("unhandledRejection");
 });
 
-await bootStrap();
+await bootStrap().catch((error: Error) => {
+  console.error("Failed to bootstrap application:", error);
+  process.exit(1);
+});

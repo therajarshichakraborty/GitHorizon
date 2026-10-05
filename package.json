@@ -4,10 +4,10 @@
   "description": "Gives an open, forward-looking, and scalable feel.",
   "scripts": {
     "format": "prettier --write .",
-    "lint": "prettier "
+    "lint": "pnpm lint:fix"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rajarshi Chakraborty",
   "license": "ISC",
   "devEngines": {
     "packageManager": {
@@ -26,7 +26,9 @@
   },
   "dependencies": {
     "dotenv": "^18.0.5",
+    "drizzle-orm": "1.0.0-rc.4",
     "express": "^5.2.1",
+    "pg": "^8.23.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "zod": "^4.6.5"

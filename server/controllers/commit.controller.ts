@@ -1,3 +1,3 @@
 export function commitFiles() {
-  console.log('Committing files');
+  console.log("Committing files");
 }
