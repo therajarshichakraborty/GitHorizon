@@ -1,7 +1,7 @@
 import { createServer, type Server } from "node:http";
 import { type Request, type Response } from "express";
 import process from "node:process";
-import { scaffoldApp } from "./scaffolfApplication.js";
+import { scaffoldApp } from "./scaffoldApplication.js";
 import { env } from "./lib/env.js";
 
 const PORT = Number(env.PORT) as number;
