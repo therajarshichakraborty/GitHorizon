@@ -1,6 +1,0 @@
-allowBuilds:
-  '@google/genai': true
-  esbuild: true
-  lightningcss: true
-  protobufjs: true
-  unrs-resolver: true
