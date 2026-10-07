@@ -30,7 +30,7 @@ const violationQueue = new Queue<ViolationJob>(VIOLATION_QUEUE, {
 
 export const queueViolation = ({ id, ip, path, ts }: ViolationJob) => {
   const minute = Math.floor(Date.now() / 60000);
-  const jobId = `${id.replace(/:/g, "_")}-${minute}`;
+  const jobId = `${id.replaceAll(":", "_")}-${minute}`;
 
   violationQueue.add("violation", { id, ip, path, ts: Date.now() }, { jobId }).catch(() => {
     console.log("Failed to queue violation");
