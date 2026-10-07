@@ -17,7 +17,9 @@
     "commit": "tsx lib/cli.ts commit",
     "push": "tsx lib/cli.ts push",
     "pull": "tsx lib/cli.ts pull",
-    "revert": "tsx lib/cli.ts revert"
+    "revert": "tsx lib/cli.ts revert",
+    "worker": "bun redis/worker.ts",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Rajarshi Chakraborty",

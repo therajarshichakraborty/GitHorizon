@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 import { env } from "../lib/env.js";
-import { redis } from "./redis.js";
-import { queueViolation } from "./violations.js";
+import { redis } from "../lib/redis.js";
+import { queueViolation } from "../lib/violations.js";
 
 /**
  * Sliding window log, executed atomically in Redis.

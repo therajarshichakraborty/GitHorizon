@@ -18,7 +18,7 @@ const envSchema = z.object({
     windowMs: z.number().default(60_000),
     failOpen: z.boolean().default(true),
   }),
-  ban: z.object({
+  node: z.object({
     threshold: z.number().default(5),
     windowSec: z.number().default(600),
     durationSec: z.number().default(900),

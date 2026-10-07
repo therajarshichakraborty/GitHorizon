@@ -1,11 +1,11 @@
 import { Worker } from "bullmq";
 import { Redis } from "ioredis";
-import { env } from "../lib/env.js";
+import { env } from "./env.js";
 import { workerConnection } from "./redis.js";
 import { VIOLATION_QUEUE, type ViolationJob } from "./violations.js";
 
 const redis = new Redis(env.redisUrl);
-const { threshold, windowSec, durationSec } = env.ban;
+const { threshold, windowSec, durationSec } = env.node;
 
 const worker = new Worker<ViolationJob>(
   VIOLATION_QUEUE,

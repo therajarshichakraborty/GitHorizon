@@ -1,11 +1,9 @@
 import { createServer, type Server } from "node:http";
-import { type Request, type Response, type NextFunction } from "express";
 import process from "node:process";
-import { scaffoldApp } from "./scaffoldApplication.js";
+import { scaffoldApplication } from "./application.js";
 import { env } from "./lib/env.js";
-import { redis } from "./redis/redis.js";
-import { rateLimit } from "./redis/rate-limiter.js";
-import { closeViolation } from "./redis/violations.js";
+import { redis } from "./lib/redis.js";
+import { closeViolation } from "./lib/violations.js";
 
 const PORT = Number(env.PORT) as number;
 const HOST = String(env.HOST) as string;
@@ -16,30 +14,8 @@ let isShuttingDown = false;
 
 export default async function bootStrap(): Promise<void> {
   try {
-    const nodeServer = await scaffoldApp();
+    const nodeServer = await scaffoldApplication();
     server = createServer(nodeServer);
-
-    // Health checks stay outside the limiter so orchestrators never get 429s.
-    nodeServer.get("/healthz", (_req, res) => {
-      res.json({ ok: true });
-    });
-
-    nodeServer.use((req: Request, res: Response, next: NextFunction) => {
-      const id = req.header("x-user-id");
-      if (id) res.locals.userId = id;
-      next();
-    });
-
-    nodeServer.use(rateLimit());
-
-    nodeServer.get("/", (req: Request, res: Response) => {
-      res.json({ message: "Server is running" });
-    });
-
-    nodeServer.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-      console.error(JSON.stringify({ level: "error", msg: err.message }));
-      res.status(500).json({ error: "internal_error" });
-    });
 
     server.on("error", (error: NodeJS.ErrnoException) => {
       if (error.code === "EADDRINUSE") {
