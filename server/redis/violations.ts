@@ -28,7 +28,7 @@ const violationQueue = new Queue<ViolationJob>(VIOLATION_QUEUE, {
   },
 });
 
-export const queueViolation = ({ id, ip, path, ts }: ViolationJob) => {
+export const queueViolation = (id: string, ip: string, path: string):void => {
   const minute = Math.floor(Date.now() / 60000);
   const jobId = `${id.replaceAll(":", "_")}-${minute}`;
 

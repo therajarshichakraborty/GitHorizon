@@ -8,5 +8,15 @@
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
   },
-  "cSpell.words": ["PTTL", "Rajarshi", "ZCARD", "ZREMRANGEBYSCORE" , "ZRANGE", "WITHSCORES" , "PEXPIRE", "ZADD"]
+  "cSpell.words": [
+    "healthz",
+    "PEXPIRE",
+    "PTTL",
+    "Rajarshi",
+    "WITHSCORES",
+    "ZADD",
+    "ZCARD",
+    "ZRANGE",
+    "ZREMRANGEBYSCORE"
+  ]
 }

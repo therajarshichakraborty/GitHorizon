@@ -1,8 +1,8 @@
-// import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
+import { randomUUID } from "node:crypto";
+import { env } from "../lib/env.js";
 import { redis } from "./redis.js";
-// import { queueViolation } from "./violations.js";
-// import { env } from "../lib/env.js";
-// import { randomUUID } from "node:crypto";
+import { queueViolation } from "./violations.js";
 
 /**
  * Sliding window log, executed atomically in Redis.
@@ -16,28 +16,27 @@ import { redis } from "./redis.js";
  * as its oldest request leaves the window.
  * Time comes from Redis (TIME) so app server clock skew cannot matter.
  */
-
 const SLIDING_WINDOW_LUA = `
 local t = redis.call('TIME')
 local now = tonumber(t[1]) * 1000 + math.floor(tonumber(t[2]) / 1000)
 local limit = tonumber(ARGV[1])
 local window = tonumber(ARGV[2])
- 
+
 local banTtl = redis.call('PTTL', KEYS[2])
 if banTtl > 0 then
   return {0, 0, banTtl, 1}
 end
- 
+
 redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, now - window)
 local count = redis.call('ZCARD', KEYS[1])
- 
+
 if count >= limit then
   local oldest = redis.call('ZRANGE', KEYS[1], 0, 0, 'WITHSCORES')
   local retry = tonumber(oldest[2]) + window - now
   if retry < 1 then retry = 1 end
   return {0, 0, retry, 0}
 end
- 
+
 redis.call('ZADD', KEYS[1], now, ARGV[3])
 redis.call('PEXPIRE', KEYS[1], window)
 local oldest = redis.call('ZRANGE', KEYS[1], 0, 0, 'WITHSCORES')
@@ -46,10 +45,7 @@ if reset < 1 then reset = 1 end
 return {1, limit - count - 1, reset, 0}
 `;
 
-redis.defineCommand("slidingWindow", {
-  numberOfKeys: 2,
-  lua: SLIDING_WINDOW_LUA,
-});
+redis.defineCommand("slidingWindow", { numberOfKeys: 2, lua: SLIDING_WINDOW_LUA });
 
 declare module "ioredis" {
   interface RedisCommander<Context> {
@@ -66,27 +62,78 @@ declare module "ioredis" {
 const localStore = new Map<string, { count: number; resetAt: number }>();
 setInterval(() => {
   const now = Date.now();
-  for (const [key, value] of localStore.entries()) {
-    if (value.resetAt <= now) {
-      localStore.delete(key);
-    }
-  }
-}, 30000).unref();
+  for (const [k, v] of localStore) if (v.resetAt <= now) localStore.delete(k);
+}, 30_000).unref();
 
-export const localCheck = (id: string, limit: number, windowMs: number) => {
+function localCheck(id: string, limit: number, windowMs: number) {
   const now = Date.now();
-  let entries = localStore.get(id);
-
-  if (!entries || entries.resetAt < now) {
-    entries = { count: 0, resetAt: now + windowMs };
-    localStore.set(id, entries);
+  let e = localStore.get(id);
+  if (!e || e.resetAt <= now) {
+    e = { count: 0, resetAt: now + windowMs };
+    localStore.set(id, e);
   }
-
-  entries.count += 1;
-
+  e.count++;
   return {
-    allowed: entries.count <= limit,
-    remaining: Math.max(0, limit - entries.count),
-    resetMs: entries.resetAt - now,
+    allowed: e.count <= limit,
+    remaining: Math.max(0, limit - e.count),
+    resetMs: e.resetAt - now,
   };
-};
+}
+
+function identify(req: Request, res: Response): string {
+  const userId = res.locals.userId as string | undefined;
+  return userId ? `u-${userId}` : `ip-${req.ip ?? "unknown"}`;
+}
+
+export function rateLimit() {
+  const { limit, windowMs, failOpen } = env.rateLimit;
+
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const id = identify(req, res);
+    let allowed: boolean;
+    let remaining: number;
+    let resetMs: number;
+    let banned = false;
+
+    try {
+      const [a, r, ms, b] = await redis.slidingWindow(
+        `rl:{${id}}:win`,
+        `rl:{${id}}:ban`,
+        limit,
+        windowMs,
+        randomUUID(),
+      );
+      allowed = a === 1;
+      remaining = r;
+      resetMs = ms;
+      banned = b === 1;
+    } catch (err) {
+      console.error(
+        JSON.stringify({ level: "error", msg: "rate limiter redis failure", err: String(err) }),
+      );
+      if (!failOpen) {
+        res.setHeader("Retry-After", "1");
+        res.status(503).json({ error: "service_unavailable" });
+        return;
+      }
+      const l = localCheck(id, limit, windowMs);
+      allowed = l.allowed;
+      remaining = l.remaining;
+      resetMs = l.resetMs;
+    }
+
+    const resetSec = Math.max(1, Math.ceil(resetMs / 1000));
+    res.setHeader("RateLimit-Limit", String(limit));
+    res.setHeader("RateLimit-Remaining", String(remaining));
+    res.setHeader("RateLimit-Reset", String(resetSec));
+
+    if (allowed) return next();
+
+    res.setHeader("Retry-After", String(resetSec));
+    if (!banned) queueViolation(id, req.ip ?? "unknown", req.path);
+    res.status(429).json({
+      error: banned ? "temporarily_blocked" : "rate_limit_exceeded",
+      retryAfterSeconds: resetSec,
+    });
+  };
+}

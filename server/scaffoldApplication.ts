@@ -7,6 +7,7 @@ import { env } from "./lib/env.js";
 export async function scaffoldApp(): Promise<Express> {
   const expressApplication: Express = express();
 
+  expressApplication.set("trust proxy", env.trustProxyHops);
   expressApplication.disable("x-powered-by");
   expressApplication.use(
     cors({
