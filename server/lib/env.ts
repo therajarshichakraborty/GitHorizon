@@ -11,6 +11,18 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1),
   HOST: z.string().default("0.0.0.0"),
   CORS_ORIGIN: z.string().default("http://localhost:4000"),
+  redisUrl: z.string().default("redis://localhost:6379"),
+  trustProxyHops: z.number().default(1),
+  rateLimit: {
+    limit: z.number().default(500),
+    windowMs: z.number().default(60_000),
+    failOpen: z.boolean().default(true),
+  },
+  ban: {
+    threshold: z.number().default(5),
+    windowSec: z.number().default(600),
+    durationSec: z.number().default(900),
+  },
 });
 
 const parsed = envSchema.safeParse(process.env);
