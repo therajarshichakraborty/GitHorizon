@@ -6,7 +6,7 @@ import { Pool } from "pg";
 import { env } from "./env.js";
 
 const pool = new Pool({
-  connectionString: String(env.DATABASE_URL) as string
+  connectionString: String(env.DATABASE_URL) as string,
 });
 
 export const db = drizzle({ client: pool });
