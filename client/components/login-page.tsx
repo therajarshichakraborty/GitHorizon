@@ -98,10 +98,26 @@ function GoogleIcon() {
   );
 }
 
-function AppleIcon() {
+function GithubIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-      <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z" />
+    <svg xmlns="http://www.w3.org/2000/svg" className = "-ml-4" width="1.2em" height="1.5em" viewBox="0 0 24 24">
+      <title>github-fill</title>
+      <path
+        fill="currentColor"
+        d="M16.974 2.31c.696-.237 1.69-.62 2.279.032c.4.444.5 1.188.571 1.755c.08.634.099 1.462-.111 2.282C20.516 7.415 21 8.653 21 10c0 2.042-1.106 3.814-2.743 5.042a9.5 9.5 0 0 1-2.592 1.354c.215.491.335 1.033.335 1.604v3a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-.995c-.955.117-1.756.017-2.438-.272c-.711-.302-1.208-.77-1.58-1.218a10 10 0 0 1-.481-.638c-.145-.206-.255-.367-.37-.516c-.234-.302-.363-.385-.447-.413a1 1 0 0 1 .632-1.897c.666.222 1.1.702 1.397 1.087c.15.195.298.409.423.586c.132.188.254.356.382.51c.253.302.506.522.826.657c.314.134.776.22 1.5.12L8 17.978a4 4 0 0 1 .334-1.582a9.5 9.5 0 0 1-2.59-1.354C4.105 13.815 3 12.043 3 10c0-1.346.483-2.583 1.284-3.62c-.21-.82-.192-1.647-.112-2.282c.074-.59.155-1.295.571-1.757c.59-.653 1.584-.268 2.28-.03c.619.21 1.384.544 2.125 1.044A11.4 11.4 0 0 1 12 3.001c.993 0 1.951.124 2.849.355a9 9 0 0 1 2.125-1.046"
+      />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
+      <title>facebook</title>
+      <path
+        fill="#1b6aff"
+        d="M7.2 16V8.5h-2V5.8h2V3.5C7.2 1.7 8.4 0 11.1 0c1.1 0 1.9.1 1.9.1l-.1 2.5h-1.7c-1 0-1.1.4-1.1 1.2v2H13l-.1 2.7h-2.8V16z"
+      />
     </svg>
   );
 }
@@ -203,7 +219,6 @@ export default function HorizonLogin() {
         </span>
       </button>
 
-
       <div className="hz-enter relative w-full max-w-[400px] border-0 bg-transparent px-8 py-9">
         <div className="flex flex-col items-center">
           <a
@@ -215,7 +230,13 @@ export default function HorizonLogin() {
           </a>
 
           <h1 className="mb-7 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-center text-[26px] font-semibold leading-tight tracking-tight">
-            <span>Sign in to Horizon</span>
+            <span>
+              Sign in to
+              <span className="bg-linear-to-r from-violet-500 to-blue-500 bg-clip-text text-transparent">
+                {" "}
+                Horizon
+              </span>
+            </span>
           </h1>
         </div>
 
@@ -232,7 +253,7 @@ export default function HorizonLogin() {
             autoComplete="username"
             value={username}
             onChange={e => setUsername(e.target.value)}
-            className={inputClass }
+            className={inputClass}
             placeholder="username@example.com"
           />
 
@@ -280,8 +301,12 @@ export default function HorizonLogin() {
             Continue with Google
           </button>
           <button type="button" className={socialClass}>
-            <AppleIcon />
-            Continue with Apple
+            <GithubIcon />
+            Continue with Github
+          </button>
+          <button type="button" className={socialClass}>
+            <FacebookIcon />
+            Continue with Facebook
           </button>
         </div>
 
