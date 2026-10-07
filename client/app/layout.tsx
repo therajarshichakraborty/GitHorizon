@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "./styles/globals.css";
 import { Nanum_Pen_Script } from "next/font/google";
 import { ThemeProvider } from "@/lib/theme-providers";
 import { AnimatedThemeToggler } from "@/components/animated-theme-toggler";
@@ -11,8 +11,8 @@ export const nanumPenScript = Nanum_Pen_Script({
 });
 
 export const metadata: Metadata = {
-  title: "IntelliCode-X",
-  description: "Your NextGeneration WorkFlow Management Application",
+  title: "Horizon",
+  description: "Gives an open, forward-looking, and scalable feel.",
 };
 
 export default function RootLayout({
@@ -21,11 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${nanumPenScript.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${nanumPenScript.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         <ThemeProvider
           attribute="class"
